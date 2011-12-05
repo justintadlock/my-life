@@ -169,7 +169,7 @@ function my_life_header_image( $url ) {
 
 		if ( !empty( $thumbnail_id ) ) {
 
-			$image = wp_get_attachment_image_src( $thumbnail_id, 'my-life-header' );
+			$image = wp_get_attachment_image_src( $thumbnail_id, 'header' );
 
 			if ( $image[1] >= HEADER_IMAGE_WIDTH && $image[2] >= HEADER_IMAGE_HEIGHT )
 				$url = $image[0];
@@ -244,7 +244,7 @@ function my_life_url_grabber() {
  * @since 0.1.0
  */
 function my_life_add_image_sizes() {
-	add_image_size( 'my-life-header', 1000, 200, true );
+	add_image_size( 'header', 1000, 200, true );
 }
 
 /**
