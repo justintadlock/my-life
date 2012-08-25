@@ -32,7 +32,6 @@ body {
 	display: table;
 	width: 100%;
 	font: normal normal normal 16px/25px Georgia, Palatino, "Palatino Linotype", "Book Antiqua", serif;
-	background: url('images/bg.png') repeat 0 0;
 	border-top: 5px solid #847e79;
 	border-bottom: 5px solid #847e79;
 	}

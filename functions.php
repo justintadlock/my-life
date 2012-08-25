@@ -69,7 +69,15 @@ function my_life_theme_setup() {
 	/* Add theme support for WordPress features. */
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'post-formats', array( 'aside', 'audio', 'image', 'gallery', 'link', 'quote', 'status', 'video' ) );
-	add_custom_background( 'my_life_custom_background_callback' );
+
+
+	/* Add support for a custom background. */
+	add_theme_support( 
+		'custom-background',
+		array(
+			'default-image' => trailingslashit( get_template_directory_uri() ) . 'images/bg.png',
+		)
+	);
 
 	/**
 	 * Add support for WordPress custom header image.  On that note, this is horrible and messy.  Expect a 
@@ -384,39 +392,14 @@ function my_life_get_image_size_links() {
 	return join( ' <span class="sep">/</span> ', $links );
 }
 
+
 /**
- * This is a fix for when a user sets a custom background color with no custom background image.  What 
- * happens is the theme's background image hides the user-selected background color.  If a user selects a 
- * background image, we'll just use the WordPress custom background callback.
- *
  * @since 0.1.0
- * @link http://core.trac.wordpress.org/ticket/16919
+ * @deprecated 0.2.0
  */
 function my_life_custom_background_callback() {
-
-	/* Get the background image. */
-	$image = get_background_image();
-
-	/* If there's an image, just call the normal WordPress callback. We won't do anything here. */
-	if ( !empty( $image ) ) {
-		_custom_background_cb();
-		return;
-	}
-
-	/* Get the background color. */
-	$color = get_background_color();
-
-	/* If no background color, return. */
-	if ( empty( $color ) )
-		return;
-
-	/* Use 'background' instead of 'background-color'. */
-	$style = "background: #{$color};";
-
-?>
-<style type="text/css">body.custom-background { <?php echo trim( $style ); ?> }</style>
-<?php
-
+	_deprecated_function( __FUNCTION__, '0.2.0' );
+	_custom_background_cb();
 }
 
 /** ====== Hybrid Core 1.3.0 functionality. ====== **/
