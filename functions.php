@@ -70,7 +70,6 @@ function my_life_theme_setup() {
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'post-formats', array( 'aside', 'audio', 'image', 'gallery', 'link', 'quote', 'status', 'video' ) );
 
-
 	/* Add support for a custom background. */
 	add_theme_support( 
 		'custom-background',
@@ -115,17 +114,8 @@ function my_life_theme_setup() {
 	/* Adds the featured image to image posts if no content is found. */
 	add_filter( 'the_content', 'my_life_image_content' );
 
-	/* Add custom <body> classes. */
-	add_filter( 'body_class', 'my_life_body_class' );
-
 	/* Filter the header image on singular views. */
 	add_filter( 'theme_mod_header_image', 'my_life_header_image' );
-
-	/* Registers custom shortcodes. */
-	add_action( 'init', 'my_life_register_shortcodes' );
-
-	/* Simplifies the taxonomy template name for post formats. */
-	add_filter( 'taxonomy_template', 'my_life_taxonomy_template' );
 
 	/* Filters the image/gallery post format archive galleries. */
 	add_filter( "{$prefix}_post_format_archive_gallery_columns", 'my_life_archive_gallery_columns' );
@@ -405,101 +395,56 @@ function my_life_custom_background_callback() {
 	_custom_background_cb();
 }
 
-/** ====== Hybrid Core 1.3.0 functionality. ====== **/
-
 /**
- * Fix for Hybrid Core until version 1.3.0 is released.  This adds the '.custom-background' class to the <body> 
- * element for the WordPress custom background feature.
- *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
- * @link http://core.trac.wordpress.org/ticket/18698
+ * @deprecated 0.2.0
  */
-function my_life_body_class( $classes ) {
-
-	if ( get_background_image() || get_background_color() )
-		$classes[] = 'custom-background';
-
-	if ( is_tax( 'post_format' ) )
-		$classes = array_map( 'my_life_clean_post_format_slug', $classes );
-
-	return $classes;
+function my_life_body_class() {
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 /**
  * Removes 'post-format-' from the taxonomy template name for post formats.
  *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
+ * @deprecated 0.2.0
  */
 function my_life_taxonomy_template( $template ) {
-
-	$term = get_queried_object();
-
-	if ( 'post_format' == $term->taxonomy ) {
-
-		$slug = my_life_clean_post_format_slug( $term->slug );
-
-		$has_template = locate_template( array( "taxonomy-{$term->taxonomy}-{$slug}.php" ) );
-
-		if ( $has_template )
-			$template = $has_template;
-	}
-
-	return $template;
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 /**
- * Add functionality to Hybrid Core 1.3.0.
- *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
+ * @deprecated 0.2.0
  */
-function my_life_clean_post_format_slug( $slug ) {
-	return str_replace( 'post-format-', '', $slug );
+function my_life_clean_post_format_slug() {
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 /**
- * Registers the [post-format-link] and [entry-permalink] shortcodes.
- *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
+ * @deprecated 0.2.0
  */
 function my_life_register_shortcodes() {
-	add_shortcode( 'post-format-link', 'my_life_post_format_link_shortcode' );
-	add_shortcode( 'entry-permalink', 'my_life_entry_permalink_shortcode' );
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 /**
- * Returns the output of the [post-format-link] shortcode.
- *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
- * @param array $attr The shortcode arguments.
- * @return string A link to the post format archive.
+ * @deprecated 0.2.0
  */
-function my_life_post_format_link_shortcode( $attr ) {
-
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
-	$format = get_post_format();
-	$url = ( empty( $format ) ? get_permalink() : get_post_format_link( $format ) );
-
-	return $attr['before'] . '<a href="' . esc_url( $url ) . '" class="post-format-link">' . get_post_format_string( $format ) . '</a>' . $attr['after'];
+function my_life_post_format_link_shortcode() {
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 /**
  * Returns the output of the [entry-permalink] shortcode.
  *
  * @since 0.1.0
- * @todo Remove once theme is upgraded to Hybrid Core 1.3.0.
- * @param array $attr The shortcode arguments.
- * @return string A permalink back to the post.
+ * @deprecated 0.2.0
  */
-function my_life_entry_permalink_shortcode( $attr ) {
-
-	$attr = shortcode_atts( array( 'before' => '', 'after' => '' ), $attr );
-
-	return $attr['before'] . '<a href="' . esc_url( get_permalink() ) . '" class="permalink">' . __( 'Permalink', 'my-life' ) . '</a>' . $attr['after'];
+function my_life_entry_permalink_shortcode() {
+	_deprecated_function( __FUNCTION__, '0.2.0' );
 }
 
 ?>
