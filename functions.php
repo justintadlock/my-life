@@ -281,7 +281,6 @@ function my_life_theme_layout_one_column( $layout ) {
  * @return array $sidebars_widgets
  */
 function my_life_disable_sidebars( $sidebars_widgets ) {
-	global $wp_query;
 
 	if ( current_theme_supports( 'theme-layouts' ) && !is_admin() ) {
 
