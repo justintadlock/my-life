@@ -79,15 +79,18 @@ function my_life_theme_setup() {
 		)
 	);
 
-	/**
-	 * Add support for WordPress custom header image.  On that note, this is horrible and messy.  Expect a 
-	 * rewrite of this entire code into something more beautiful in future versions.
-	 */
-	add_custom_image_header( '__return_false', '__return_false' );
-	define( 'NO_HEADER_TEXT', true );
-	define( 'HEADER_IMAGE', 'remove-header' ); // Setting the default to 'remove-header' instead of empty string.
-	define( 'HEADER_IMAGE_WIDTH', 1000 );
-	define( 'HEADER_IMAGE_HEIGHT', 200 );
+	/* Add support for a custom header image. */
+	add_theme_support(
+		'custom-header',
+		array(
+			'default-image' => 'remove-header',
+			'width' => 1000,
+			'height' => 200,
+			'header-text' => false,
+			'wp-head-callback'       => '__return_false',
+			'admin-head-callback'    => '__return_false',
+		)
+	);
 
 	/* Embed width/height defaults. */
 	add_filter( 'embed_defaults', 'my_life_embed_defaults' );
