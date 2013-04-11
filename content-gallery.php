@@ -44,7 +44,7 @@ do_atomic( 'before_entry' ); // my-life_before_entry ?>
 				wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', 'my-life' ), 'after' => '</p>' ) );
 			} ?>
 
-			<?php $count = my_life_get_image_attachment_count(); ?>
+			<?php $count = post_format_tools_get_image_attachment_count(); ?>
 			<p class="image-count"><?php printf( _n( 'This gallery contains %s image.', 'This gallery contains %s images.', $count, 'my-life' ), $count ); ?></p>
 
 		</div><!-- .entry-summary -->
