@@ -8,7 +8,7 @@
  * @subpackage Template
  * @since 0.1.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2011 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2011 - 2013, Justin Tadlock
  * @link http://themehybrid.com/themes/my-life
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -36,7 +36,7 @@ do_atomic( 'before_entry' ); // my-life_before_entry ?>
 
 		<?php if ( get_the_title() ) { ?>
 
-			<h2 class="entry-title"><a href="<?php echo esc_url( my_life_url_grabber() ); ?>" title="<?php the_title_attribute(); ?>"><?php printf( '%s <span class="meta-nav">&rarr;</span>', the_title( '', '', false ) ); ?></a></h2>
+			<h2 class="entry-title"><a href="<?php echo esc_url( post_format_tools_url_grabber() ); ?>" title="<?php the_title_attribute(); ?>"><?php printf( '%s <span class="meta-nav">&rarr;</span>', the_title( '', '', false ) ); ?></a></h2>
 
 		<?php } else { ?>
 

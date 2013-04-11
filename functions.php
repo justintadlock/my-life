@@ -20,10 +20,10 @@
  *
  * @package MyLife
  * @subpackage Functions
- * @version 0.2.0
+ * @version 0.3.0
  * @since 0.1.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2011 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2011 - 2013, Justin Tadlock
  * @link http://themehybrid.com/themes/my-life
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -52,12 +52,17 @@ function my_life_theme_setup() {
 	add_theme_support( 'hybrid-core-widgets' );
 	add_theme_support( 'hybrid-core-shortcodes' );
 	add_theme_support( 'hybrid-core-theme-settings', array( 'about', 'footer' ) );
-	add_theme_support( 'hybrid-core-drop-downs' );
+	add_theme_support( 'hybrid-core-scripts', array( 'comment-reply', 'drop-downs' ) );
+	add_theme_support( 'hybrid-core-styles', array( 'style' ) );
 	add_theme_support( 'hybrid-core-template-hierarchy' );
-	//add_theme_support( 'hybrid-core-seo' );
 
 	/* Add theme support for framework extensions. */
-	add_theme_support( 'theme-layouts', array( '1c', '2c-l', '2c-r', '3c-l', '3c-r', '3c-c' ) );
+	add_theme_support( 
+		'theme-layouts', 
+		array( '1c', '2c-l', '2c-r', '3c-l', '3c-r', '3c-c' ),
+		array( 'default' => '2c-l', 'customize' => true )
+	);
+
 	add_theme_support( 'post-stylesheets' );
 	add_theme_support( 'dev-stylesheet' );
 	add_theme_support( 'loop-pagination' );
@@ -107,12 +112,6 @@ function my_life_theme_setup() {
 
 	/* Add custom image sizes. */
 	add_action( 'init', 'my_life_add_image_sizes' );
-
-	/* Wraps <blockquote> around quote posts. */
-	add_filter( 'the_content', 'my_life_quote_content' );
-
-	/* Adds the featured image to image posts if no content is found. */
-	add_filter( 'the_content', 'my_life_image_content' );
 
 	/* Filter the header image on singular views. */
 	add_filter( 'theme_mod_header_image', 'my_life_header_image' );
@@ -181,65 +180,6 @@ function my_life_header_image( $url ) {
 }
 
 /**
- * Wraps the output of the quote post format content in a <blockquote> element if the user hasn't added a 
- * <blockquote> in the post editor.
- *
- * @since 0.1.0
- * @param string $content The post content.
- * @return string $content
- */
-function my_life_quote_content( $content ) {
-
-	if ( has_post_format( 'quote' ) ) {
-		preg_match( '/<blockquote.*?>/', $content, $matches );
-
-		if ( empty( $matches ) )
-			$content = "<blockquote>{$content}</blockquote>";
-	}
-
-	return $content;
-}
-
-/**
- * Returns the featured image for the image post format if the user didn't add any content to the post.
- *
- * @since 0.1.0
- * @param string $content The post content.
- * @return string $content
- */
-function my_life_image_content( $content ) {
-
-	if ( has_post_format( 'image' ) && '' == $content ) {
-		if ( is_singular() )
-			$content = get_the_image( array( 'size' => 'full', 'meta_key' => false, 'link_to_post' => false ) );
-		else
-			$content = get_the_image( array( 'size' => 'full', 'meta_key' => false ) );
-	}
-
-	return $content;
-}
-
-/**
- * Grabs the first URL from the post content of the current post.  This is meant to be used with the link post 
- * format to easily find the link for the post. 
- *
- * @since 0.1.0
- * @return string The link if found.  Otherwise, the permalink to the post.
- *
- * @note This is a modified version of the twentyeleven_url_grabber() function in the TwentyEleven theme.
- * @author wordpressdotorg
- * @copyright Copyright (c) 2011 - 2012, wordpressdotorg
- * @link http://wordpress.org/extend/themes/twentyeleven
- * @license http://wordpress.org/about/license
- */
-function my_life_url_grabber() {
-	if ( ! preg_match( '/<a\s[^>]*?href=[\'"](.+?)[\'"]/is', get_the_content(), $matches ) )
-		return get_permalink( get_the_ID() );
-
-	return esc_url_raw( $matches[1] );
-}
-
-/**
  * Adds custom image sizes for featured images.  The 'feature' image size is used for sticky posts.
  *
  * @since 0.1.0
@@ -256,10 +196,10 @@ function my_life_add_image_sizes() {
 function my_life_one_column() {
 
 	if ( !is_active_sidebar( 'primary' ) && !is_active_sidebar( 'secondary' ) )
-		add_filter( 'get_theme_layout', 'my_life_theme_layout_one_column' );
+		add_filter( 'theme_mod_theme_layout', 'my_life_theme_layout_one_column' );
 
-	elseif ( is_attachment() && 'layout-default' == theme_layouts_get_layout() )
-		add_filter( 'get_theme_layout', 'my_life_theme_layout_one_column' );
+	elseif ( is_attachment() && wp_attachment_is_image() && 'default' == get_post_layout( get_queried_object_id() ) )
+		add_filter( 'theme_mod_theme_layout', 'my_life_theme_layout_one_column' );
 }
 
 /**
@@ -270,7 +210,7 @@ function my_life_one_column() {
  * @return string
  */
 function my_life_theme_layout_one_column( $layout ) {
-	return 'layout-1c';
+	return '1c';
 }
 
 /**
@@ -339,16 +279,6 @@ function my_life_next_comments_link_attributes( $attributes ) {
 	return $attributes . ' class="next"';
 }
 
-/**
- * Returns the number of images attached to the current post in the loop.
- *
- * @since 0.1.0
- * @return int
- */
-function my_life_get_image_attachment_count() {
-	$images = get_children( array( 'post_parent' => get_the_ID(), 'post_type' => 'attachment', 'post_mime_type' => 'image', 'numberposts' => -1 ) );
-	return count( $images );
-}
 
 /**
  * Returns a set of image attachment links based on size.
@@ -444,6 +374,40 @@ function my_life_post_format_link_shortcode() {
  */
 function my_life_entry_permalink_shortcode() {
 	_deprecated_function( __FUNCTION__, '0.2.0' );
+}
+
+/**
+ * @since 0.1.0
+ * @deprecated 0.3.0
+ */
+function my_life_quote_content() {
+	_deprecated_function( __FUNCTION__, '0.3.0' );
+}
+
+/**
+ * @since 0.1.0
+ * @deprecated 0.3.0
+ */
+function my_life_image_content() {
+	_deprecated_function( __FUNCTION__, '0.3.0' );
+}
+
+/**
+ * @since 0.1.0
+ * @deprecated 0.3.0
+ */
+function my_life_get_image_attachment_count() {
+	_deprecated_function( __FUNCTION__, '0.3.0', 'post_format_tools_get_image_attachment_count' );
+	post_format_tools_get_image_attachment_count();
+}
+
+/**
+ * @since 0.1.0
+ * @deprecated 0.3.0
+ */
+function my_life_url_grabber() {
+	_deprecated_function( __FUNCTION__, '0.3.0', 'post_format_tools_url_grabber' );
+	post_format_tools_url_grabber();
 }
 
 ?>

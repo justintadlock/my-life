@@ -10,7 +10,7 @@
  * @subpackage Template
  * @since 0.1.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2011 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2011 - 2013, Justin Tadlock
  * @link http://themehybrid.com/themes/my-life
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
@@ -18,10 +18,9 @@
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
+
 <meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
 <title><?php hybrid_document_title(); ?></title>
-
-<link rel="stylesheet" href="<?php echo get_stylesheet_uri(); ?>" type="text/css" media="all" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>" />
 
@@ -45,10 +44,10 @@
 
 			<div class="wrap">
 
-				<div id="branding">
-					<?php hybrid_site_title(); ?>
-					<?php hybrid_site_description(); ?>
-				</div><!-- #branding -->
+				<hgroup id="branding">
+					<h1 id="site-title"><a href="<?php echo home_url(); ?>" title="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>
+					<h2 id="site-description"><?php bloginfo( 'description' ); ?></h2>
+				</hgroup><!-- #branding -->
 
 				<?php do_atomic( 'header' ); // my-life_header ?>
 
