@@ -20,10 +20,10 @@
  *
  * @package MyLife
  * @subpackage Functions
- * @version 0.2.0
+ * @version 0.3.0
  * @since 0.1.0
  * @author Justin Tadlock <justin@justintadlock.com>
- * @copyright Copyright (c) 2011 - 2012, Justin Tadlock
+ * @copyright Copyright (c) 2011 - 2013, Justin Tadlock
  * @link http://themehybrid.com/themes/my-life
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
